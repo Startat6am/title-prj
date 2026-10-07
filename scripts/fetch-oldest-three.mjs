@@ -2,36 +2,51 @@ import { Innertube } from "youtubei.js";
 import { getTranscript } from "get-youtube-transcript";
 import { writeFile } from "node:fs/promises";
 
-const channelId = "UCl0p-aoACzTOgnCctzIQWPQ";
 const languages = ["en", "ru"];
 
-const youtube = await Innertube.create();
-let feed = await (await youtube.getChannel(channelId)).getVideos();
-const seen = new Set();
-const oldest = [];
+const candidates = [
+  {
+    youtubeId: "VvfcEPN7wXE",
+    title: "ВОТ КАК Я ЕМ МАНДАРИНЫ. ГОДНОЕ ПОЕДАНИЕ ЦИТРУСОВЫХ ФРУКТОВ. Ешьте как я и будете здоровы!",
+    publishedText: "2023-01-04",
+  },
+  {
+    youtubeId: "SbqSnd63reA",
+    title: "МОЁ ПЕРВОЕ ВИДЕО НА YouTube. Чем лучше обеззараживать семена. Реальные опыты и рекомендации.",
+    publishedText: "2023-01-19",
+  },
+];
 
-while (true) {
-  for (const item of feed.videos ?? []) {
+const youtube = await Innertube.create();
+
+async function findByTitle(query) {
+  const result = await youtube.search(query, { type: "video" });
+  for (const item of result.videos ?? []) {
     const video = item;
     const id = String(video.video_id ?? video.id ?? "");
-    if (!id || seen.has(id)) continue;
-    seen.add(id);
-
-    oldest.push({
-      youtubeId: id,
-      title: typeof video.title === "string" ? video.title : (video.title?.text ?? id),
-      publishedText: video.published?.text ?? null,
-    });
-    if (oldest.length > 3) oldest.shift();
+    const title =
+      typeof video.title === "string"
+        ? video.title
+        : String(video.title?.text ?? "");
+    if (id && title.toLowerCase().includes("тест")) {
+      return {
+        youtubeId: id,
+        title,
+        publishedText: video.published?.text ?? "2023-01-04",
+      };
+    }
   }
-
-  if (!feed.has_continuation) break;
-  feed = await feed.getContinuation();
+  return null;
 }
 
-if (oldest.length < 3) {
-  throw new Error(`Expected at least 3 videos, found ${oldest.length}`);
+const testVideo = await findByTitle(
+  "ТЕСТ! УМНЕЕ ЛИ ВЫ, ЧЕМ 9 МИЛЛИОНОВ ЛЮДЕЙ? Иванова Наука"
+);
+if (!testVideo) {
+  throw new Error("Could not locate the 2023-01-04 test video.");
 }
+
+const oldest = [testVideo, candidates[0], candidates[1]];
 
 const results = [];
 for (const video of oldest) {
@@ -54,5 +69,22 @@ for (const video of oldest) {
   }
 }
 
-await writeFile("oldest-three-transcripts.json", JSON.stringify(results, null, 2), "utf8");
-console.log(JSON.stringify(results.map(({youtubeId,title,publishedText,status,error}) => ({youtubeId,title,publishedText,status,error})), null, 2));
+await writeFile(
+  "oldest-three-transcripts.json",
+  JSON.stringify(results, null, 2),
+  "utf8"
+);
+
+console.log(
+  JSON.stringify(
+    results.map(({ youtubeId, title, publishedText, status, error }) => ({
+      youtubeId,
+      title,
+      publishedText,
+      status,
+      error,
+    })),
+    null,
+    2
+  )
+);
