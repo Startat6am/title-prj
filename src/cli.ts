@@ -17,6 +17,13 @@ if (command === "help") {
   process.exit(0);
 }
 
+if (command === "discover") {
+  const { discoverChannelVideos } = await import("./discover.js");
+  const total = await discoverChannelVideos();
+  console.log("Discovered:", total);
+  process.exit(0);
+}
+
 if (command === "db:ping") {
   const { sql } = await import("./db.js");
   const rows = await sql`select now() as now`;
