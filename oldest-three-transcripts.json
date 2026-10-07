@@ -1,0 +1,26 @@
+[
+  {
+    "youtubeId": "n-AV4pC2W_E",
+    "title": "ТЕСТ! УМНЕЕ ЛИ ВЫ, ЧЕМ 9 МИЛЛИОНОВ ЛЮДЕЙ? Пройдите этот тест и узнаете!",
+    "publishedText": "3y ago",
+    "youtubeUrl": "https://www.youtube.com/watch?v=n-AV4pC2W_E",
+    "status": "failed",
+    "error": "Video not available: LOGIN_REQUIRED"
+  },
+  {
+    "youtubeId": "VvfcEPN7wXE",
+    "title": "ВОТ КАК Я ЕМ МАНДАРИНЫ. ГОДНОЕ ПОЕДАНИЕ ЦИТРУСОВЫХ ФРУКТОВ. Ешьте как я и будете здоровы!",
+    "publishedText": "2023-01-04",
+    "youtubeUrl": "https://www.youtube.com/watch?v=VvfcEPN7wXE",
+    "status": "failed",
+    "error": "Video not available: LOGIN_REQUIRED"
+  },
+  {
+    "youtubeId": "SbqSnd63reA",
+    "title": "МОЁ ПЕРВОЕ ВИДЕО НА YouTube. Чем лучше обеззараживать семена. Реальные опыты и рекомендации.",
+    "publishedText": "2023-01-19",
+    "youtubeUrl": "https://www.youtube.com/watch?v=SbqSnd63reA",
+    "status": "failed",
+    "error": "Video not available: LOGIN_REQUIRED"
+  }
+]
